@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <title>HR Daily Interview Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>HR Daily Interview Tracking Sheet</h1>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addInterviewModal">
+            Add Interview
+        </button>
+        <table class="table table-striped mt-3" id="interviewsTable">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Candidate Name</th>
+                    <th>Position Applied For</th>
+                    <th>Interview Stage</th>
+                    <th>Status</th>
+                    <th>Reason for Rejection / Hold</th>
+                    <th>Remarks</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="interviewsTableBody">
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination" id="pagination">
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Add Interview Modal -->
+    <div class="modal fade" id="addInterviewModal" tabindex="-1" aria-labelledby="addInterviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addInterviewModalLabel">Add Interview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addInterviewForm">
+                        <div class="mb-3">
+                            <label for="date" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="candidateName" class="form-label">Candidate Name</label>
+                            <input type="text" class="form-control" id="candidateName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="positionAppliedFor" class="form-label">Position Applied For</label>
+                            <input type="text" class="form-control" id="positionAppliedFor" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="interviewStage" class="form-label">Interview Stage</label>
+                            <select class="form-select" id="interviewStage" required>
+                                <option value="">Select</option>
+                                <option value="Technical Round">Technical Round</option>
+                                <option value="HR Round">HR Round</option>
+                                <option value="Final Round">Final Round</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status" required>
+                                <option value="">Select</option>
+                                <option value="Selected">Selected</option>
+                                <option value="Rejected">Rejected</option>
+                                <option value="On Hold">On Hold</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="reasonForRejectionOrHold" class="form-label">Reason for Rejection / Hold</label>
+                            <textarea class="form-control" id="reasonForRejectionOrHold"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="remarks" class="form-label">Remarks</label>
+                            <textarea class="form-control" id="remarks"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="addInterviewBtn">Add Interview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Interview Modal -->
+    <div class="modal fade" id="editInterviewModal" tabindex="-1" aria-labelledby="editInterviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editInterviewModalLabel">Edit Interview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editInterviewForm">
+                        <div class="mb-3">
+                            <label for="editDate" class="form-label">Date</label>
+                            <input type="date" class="form-control" id="editDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editCandidateName" class="form-label">Candidate Name</label>
+                            <input type="text" class="form-control" id="editCandidateName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editPositionAppliedFor" class="form-label">Position Applied For</label>
+                            <input type="text" class="form-control" id="editPositionAppliedFor" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editInterviewStage" class="form-label">Interview Stage</label>
+                            <select class="form-select" id="editInterviewStage" required>
+                                <option value="">Select</option>
+                                <option value="Technical Round">Technical Round</option>
+                                <option value="HR Round">HR Round</option>
+                                <option value="Final Round">Final Round</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editStatus" class="form-label">Status</label>
+                            <select class="form-select" id="editStatus" required>
+                                <option value="">Select</option>
+                                <option value="Selected">Selected</option>
+                                <option value="Rejected">Rejected</option>
+                                <option value="On Hold">On Hold</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editReasonForRejectionOrHold" class="form-label">Reason for Rejection / Hold</label>
+                            <textarea class="form-control" id="editReasonForRejectionOrHold"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="editRemarks" class="form-label">Remarks</label>
+                            <textarea class="form-control" id="editRemarks"></textarea>
+                        </div>
+                        <input type="hidden" id="editInterviewId">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="editInterviewBtn">Edit Interview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script>
+        let interviews = JSON.parse(localStorage.getItem('interviews')) || [];
+        let currentPage = 1;
+        let interviewsPerPage = 10;
+
+        function populateInterviewsTable() {
+            let tableBody = document.getElementById('interviewsTableBody');
+            tableBody.innerHTML = '';
+
+            let start = (currentPage - 1) * interviewsPerPage;
+            let end = start + interviewsPerPage;
+
+            for (let i = start; i < end && i < interviews.length; i++) {
+                let interview = interviews[i];
+                let row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${interview.date}</td>
+                    <td>${interview.candidateName}</td>
+                    <td>${interview.positionAppliedFor}</td>
+                    <td>${interview.interviewStage}</td>
+                    <td>${interview.status}</td>
+                    <td>${interview.reasonForRejectionOrHold}</td>
+                    <td>${interview.remarks}</td>
+                    <td>
+                        <button class="btn btn-primary btn-sm" onclick="editInterview(${interview.id})">Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteInterview(${interview.id})">Delete</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            }
+        }
+
+        function populatePagination() {
+            let pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            let totalPages = Math.ceil(interviews.length / interviewsPerPage);
+
+            for (let i = 1; i <= totalPages; i++) {
+                let page = document.createElement('li');
+                page.classList.add('page-item');
+                let pageLink = document.createElement('a');
+                pageLink.classList.add('page-link');
+                pageLink.textContent = i;
+                pageLink.onclick = function() {
+                    currentPage = i;
+                    populateInterviewsTable();
+                };
+                page.appendChild(pageLink);
+                pagination.appendChild(page);
+            }
+        }
+
+        function addInterview() {
+            let date = document.getElementById('date').value;
+            let candidateName = document.getElementById('candidateName').value;
+            let positionAppliedFor = document.getElementById('positionAppliedFor').value;
+            let interviewStage = document.getElementById('interviewStage').value;
+            let status = document.getElementById('status').value;
+            let reasonForRejectionOrHold = document.getElementById('reasonForRejectionOrHold').value;
+            let remarks = document.getElementById('remarks').value;
+
+            let interview = {
+                id: interviews.length + 1,
+                date: date,
+                candidateName: candidateName,
+                positionAppliedFor: positionAppliedFor,
+                interviewStage: interviewStage,
+                status: status,
+                reasonForRejectionOrHold: reasonForRejectionOrHold,
+                remarks: remarks
+            };
+
+            interviews.push(interview);
+            localStorage.setItem('interviews', JSON.stringify(interviews));
+
+            populateInterviewsTable();
+            populatePagination();
+
+            document.getElementById('addInterviewForm').reset();
+            let addInterviewModal = document.getElementById('addInterviewModal');
+            let modal = bootstrap.Modal.getInstance(addInterviewModal);
+            modal.hide();
+        }
+
+        function editInterview(id) {
+            let interview = interviews.find(interview => interview.id === id);
+
+            document.getElementById('editDate').value = interview.date;
+            document.getElementById('editCandidateName').value = interview.candidateName;
+            document.getElementById('editPositionAppliedFor').value = interview.positionAppliedFor;
+            document.getElementById('editInterviewStage').value = interview.interviewStage;
+            document.getElementById('editStatus').value = interview.status;
+            document.getElementById('editReasonForRejectionOrHold').value = interview.reasonForRejectionOrHold;
+            document.getElementById('editRemarks').value = interview.remarks;
+            document.getElementById('editInterviewId').value = interview.id;
+
+            let editInterviewModal = document.getElementById('editInterviewModal');
+            let modal = new bootstrap.Modal(editInterviewModal);
+            modal.show();
+        }
+
+        function editInterviewBtn() {
+            let id = document.getElementById('editInterviewId').value;
+            let date = document.getElementById('editDate').value;
+            let candidateName = document.getElementById('editCandidateName').value;
+            let positionAppliedFor = document.getElementById('editPositionAppliedFor').value;
+            let interviewStage = document.getElementById('editInterviewStage').value;
+            let status = document.getElementById('editStatus').value;
+            let reasonForRejectionOrHold = document.getElementById('editReasonForRejectionOrHold').value;
+            let remarks = document.getElementById('editRemarks').value;
+
+            let interview = interviews.find(interview => interview.id === parseInt(id));
+
+            interview.date = date;
+            interview.candidateName = candidateName;
+            interview.positionAppliedFor = positionAppliedFor;
+            interview.interviewStage = interviewStage;
+            interview.status = status;
+            interview.reasonForRejectionOrHold = reasonForRejectionOrHold;
+            interview.remarks = remarks;
+
+            localStorage.setItem('interviews', JSON.stringify(interviews));
+
+            populateInterviewsTable();
+
+            let editInterviewModal = document.getElementById('editInterviewModal');
+            let modal = bootstrap.Modal.getInstance(editInterviewModal);
+            modal.hide();
+        }
+
+        function deleteInterview(id) {
+            interviews = interviews.filter(interview => interview.id !== id);
+
+            localStorage.setItem('interviews', JSON.stringify(interviews));
+
+            populateInterviewsTable();
+            populatePagination();
+        }
+
+        document.getElementById('addInterviewBtn').onclick = addInterview;
+        document.getElementById('editInterviewBtn').onclick = editInterviewBtn;
+
+        populateInterviewsTable();
+        populatePagination();
+    </script>
+</body>
+</html>
